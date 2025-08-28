@@ -3,6 +3,7 @@ from bson import ObjectId
 import datetime
 import time
 import msvcrt
+from prompt_toolkit import prompt
 
 def show_user_info(user):
     if user is not None:
@@ -78,12 +79,12 @@ def change_user_info_db(users, user, attribute, new_value):
         return None
 
 def notes_mode(user, notes):
-    notes_available = notes.find({"user_id": user["_id"]})
+    notes_available = list(notes.find({"user_id": ObjectId(user["_id"])}))
     if notes_available is not None:
         print(Fore.BLUE + "Choose a note:")
         i = 1
         for note in notes_available:
-            print(f"\t{i}. {note['name']}")
+            print(f"\t{i}. {note["name"]}")
             i += 1
         print("\t0. Create a new note"
               "\n\t-1. Cancel the operation")
@@ -97,16 +98,52 @@ def notes_mode(user, notes):
         if choice == 0:
             note_name = input(Fore.BLUE + "Choose a name for the new note: " + Fore.RESET)
             erase_lines(1)
-            notes.insert_one(
-                {
-                    "user_id": ObjectId(user["_id"]),
-                    "name": note_name,
-                    "content": "",
-                    "date_created": datetime.datetime.now()
-                }
-            )
-            print(Fore.GREEN + "New note created!")
-            time.sleep(2)
-            erase_lines(1)
+            if notes.find_one({"name": note_name, "user_id": ObjectId(user["_id"])}) is not None:
+                print(Fore.RED + "You already have a note with that name!")
+                time.sleep(2)
+                erase_lines(1)
+            else:
+                notes.insert_one(
+                    {
+                        "user_id": ObjectId(user["_id"]),
+                        "name": note_name,
+                        "content": "",
+                        "date_created": datetime.datetime.now()
+                    }
+                )
+                print(Fore.GREEN + "New note created!")
+                time.sleep(2)
+                erase_lines(1)
         else:
-            return
+            note_chosen = notes_available[choice - 1]
+            if note_chosen is not None:
+                print(Fore.BLUE + "Choose an action:")
+                print("\t1. Open"
+                      "\n\t2. Rename"
+                      "\n\t3. Delete"
+                      "\n\t0. Exit")
+                choice = get_choice(5, 0, 3)
+                match choice:
+                    case 1:
+                        print(Fore.BLUE + f"---------- {note_chosen["name"]}:")
+                        print(Fore.BLUE + "----- Use Alt+Enter or Ctrl+Z+Enter to exit")
+                        content = prompt(default=note_chosen["content"], multiline=True)
+                        notes.update_one({"_id": ObjectId(note_chosen["_id"])}, {"$set": {"content": content}})
+                        lines_amount = content.count('\n') + 1
+                        erase_lines(lines_amount+2)
+                        print(Fore.GREEN + "Note saved!")
+                        time.sleep(2)
+                        erase_lines(1)
+                    case 2:
+                        return
+                    case 3:
+                        return
+                    case 4:
+                        print(Fore.GREEN + "Closed!")
+                        time.sleep(2)
+                        erase_lines(1)
+                        return
+            else:
+                print(Fore.RED + "Note not found!")
+                time.sleep(2)
+                erase_lines(1)
