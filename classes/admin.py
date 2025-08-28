@@ -1,7 +1,5 @@
-from unittest import case
-
 from pymongo.errors import DuplicateKeyError
-from classes import get_choice, erase_lines, Fore
+from classes import get_choice, erase_lines, Fore, show_user_info, change_user_info
 import time
 import msvcrt
 from bson import ObjectId
@@ -55,31 +53,7 @@ def admin_menu(users, notes):
                 else:
                     user_found = find_user_by(users, choice)
                     show_user_info(user_found)
-                    show_user_info_static(user_found)
-                    if user_found is None:
-                        continue
-
-                    print(Fore.BLUE + "What to change:")
-                    print("\t1. Username"
-                          "\n\t2. Password"
-                          "\n\t0. Cancel the operation")
-                    choice = get_choice(4, 0, 2)
-                    match choice:
-                        case 1:
-                            new_username = input(Fore.BLUE + "Enter a new username: " + Fore.RESET)
-                            print(Fore.YELLOW + "Are you sure you want to change this user's username?")
-                            change_user_info(users, user_found, "username", new_username)
-                            erase_lines(3)
-                        case 2:
-                            new_password = input(Fore.BLUE + "Enter a new password: " + Fore.RESET)
-                            print(Fore.YELLOW + "Are you sure you want to change this user's password?")
-                            change_user_info(users, user_found, "password", new_password)
-                            erase_lines(3)
-                        case 0:
-                            erase_lines(1)
-                            print(Fore.BLUE + "Operation cancelled!")
-                            time.sleep(2)
-                            erase_lines(1)
+                    change_user_info(user_found, users)
             case 3:
                 print(Fore.BLUE + "Your choice:", "Delete a user")
                 print(Fore.BLUE + "Delete a user by:")
@@ -148,6 +122,7 @@ def find_user_by(users, choice):
     if choice == 1:
         while True:
             username_to_find = input(Fore.BLUE + "Please enter a username: " + Fore.RESET)
+            erase_lines(2)
             if username_to_find == "admin":
                 erase_lines(1)
                 print(Fore.RED + "No permission.")
@@ -159,48 +134,8 @@ def find_user_by(users, choice):
     if choice == 2:
         id_to_find = input(Fore.BLUE + "Please enter a user's ID: " + Fore.RESET)
         user_found = users.find_one({"_id": ObjectId(id_to_find)})
+
+    print(Fore.GREEN + "User found!")
+    time.sleep(1)
+    erase_lines(1)
     return user_found
-
-def show_user_info(user):
-    if user is not None:
-        erase_lines(2)
-        print(Fore.GREEN + "User found!")
-        time.sleep(1)
-        erase_lines(1)
-        print(Fore.BLUE + "User ID:", user["_id"])
-        print(Fore.BLUE + "Username:", user["username"])
-        print(Fore.BLUE + "Password:", user["password"])
-        print("Tap to continue...")
-        msvcrt.getch()
-        erase_lines(4)
-    else:
-        erase_lines(2)
-        print(Fore.RED + "There is no such user!")
-        time.sleep(2)
-        erase_lines(1)
-
-def show_user_info_static(user):
-    if user is not None:
-        print(Fore.BLUE + "\tUser ID:", user["_id"])
-        print(Fore.BLUE + "\tUsername:", user["username"])
-        print(Fore.BLUE + "\tPassword:", user["password"])
-
-def change_user_info(users, user, attribute, new_value):
-    print("\t" + user[attribute] + " -> " + new_value)
-    confirmation = input(Fore.YELLOW + "Type CONFIRM to confirm: " + Fore.RESET)
-    if confirmation == "CONFIRM":
-        if attribute == "username":
-            user_check = users.find_one({"username": new_value})
-            if user_check is not None:
-                print(Fore.RED + "User with this username already exists!")
-                return
-        users.update_one({"_id": user["_id"]}, {"$set": {attribute: new_value}})
-        erase_lines(4)
-        print(Fore.GREEN + f"{attribute} successfully changed!")
-        time.sleep(2)
-        erase_lines(1)
-    else:
-        erase_lines(3)
-        print(Fore.RED + "Change not confirmed!")
-        time.sleep(2)
-        erase_lines(2)
