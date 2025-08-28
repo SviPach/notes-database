@@ -1,4 +1,4 @@
-from classes import erase_lines, init, Fore, Back, Style
+from classes import init, Fore, erase_lines
 init(autoreset=True)
 
 

@@ -12,11 +12,6 @@ def show_user_info(user):
         print("Tap to continue...")
         msvcrt.getch()
         erase_lines(4)
-    else:
-        erase_lines(2)
-        print(Fore.RED + "There is no such user!")
-        time.sleep(2)
-        erase_lines(1)
 
 def show_user_info_static(user):
     if user is not None:
@@ -173,3 +168,9 @@ def notes_mode(user, notes):
                 print(Fore.RED + "Note not found!")
                 time.sleep(2)
                 erase_lines(1)
+
+def log_out_message():
+    erase_lines(1)
+    print(Fore.GREEN + "Successfully logged out!")
+    time.sleep(2)
+    erase_lines(1)

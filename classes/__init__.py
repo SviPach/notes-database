@@ -13,7 +13,11 @@ from classes.functions import (show_user_info,
                                show_user_info_static,
                                change_user_info,
                                change_user_info_db,
-                               notes_mode)
+                               notes_mode,
+                               log_out_message)
+from classes.functions_admin import (admin_add_new_user,
+                                     admin_delete_user,
+                                     admin_find_user)
 from classes.admin import admin_menu
 from classes.user import user_menu
 
@@ -25,5 +29,7 @@ __all__ = [
     "change_user_info_db", "notes_mode",
     "prompt", "ObjectId", "datetime",
     "time", "msvcrt", "DuplicateKeyError",
-    "pymongo", "MongoClient"
+    "pymongo", "MongoClient", "log_out_message",
+    "admin_add_new_user", "admin_delete_user",
+    "admin_find_user"
 ]

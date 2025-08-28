@@ -1,6 +1,6 @@
 from classes import (
-    get_choice, erase_lines, Fore,
-    show_user_info, change_user_info, notes_mode, time
+    Fore, get_choice, erase_lines, show_user_info,
+    change_user_info, notes_mode, log_out_message
 )
 
 
@@ -34,8 +34,5 @@ def user_menu(username, users, notes):
             case 3:
                 notes_mode(user, notes)
             case 0:
-                erase_lines(1)
-                print(Fore.GREEN + "Successfully logged out!")
-                time.sleep(2)
-                erase_lines(1)
+                log_out_message()
                 return
