@@ -27,7 +27,7 @@ def get_choice(
     erased = False
     while True:
         try:
-            choice = int(input(Fore.BLUE + "Your choice: "))
+            choice = int(input(Fore.BLUE + "Your choice: " + Fore.RESET))
             if min_choice_possible <= choice <= max_choice_possible:
                 if not erased:
                     erase_lines(1)
