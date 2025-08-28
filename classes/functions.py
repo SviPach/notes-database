@@ -150,9 +150,21 @@ def notes_mode(user, notes):
                             print(Fore.RED + "Change not confirmed!")
                             time.sleep(2)
                             erase_lines(1)
-                            return None
                     case 3:
-                        return
+                        print(Fore.BLUE + f"---------- {note_chosen["name"]}:")
+                        print(Fore.YELLOW + "Are you sure you want to delete this note?")
+                        confirmation = input(Fore.YELLOW + "Type CONFIRM to confirm: " + Fore.RESET)
+                        if confirmation == "CONFIRM":
+                            notes.delete_one({"_id": ObjectId(note_chosen["_id"])})
+                            erase_lines(3)
+                            print(Fore.GREEN + "Note successfully deleted!")
+                            time.sleep(2)
+                            erase_lines(1)
+                        else:
+                            erase_lines(3)
+                            print(Fore.RED + "Deletion not confirmed!")
+                            time.sleep(2)
+                            erase_lines(1)
                     case 4:
                         print(Fore.GREEN + "Closed!")
                         time.sleep(2)
