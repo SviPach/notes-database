@@ -135,7 +135,22 @@ def notes_mode(user, notes):
                         time.sleep(2)
                         erase_lines(1)
                     case 2:
-                        return
+                        print(Fore.BLUE + f"---------- {note_chosen["name"]}:")
+                        new_name = input(Fore.BLUE + "Enter new name: " + Fore.RESET)
+                        print("\t" + note_chosen["name"] + " -> " + new_name)
+                        confirmation = input(Fore.YELLOW + "Type CONFIRM to confirm: " + Fore.RESET)
+                        if confirmation == "CONFIRM":
+                            notes.update_one({"_id": ObjectId(note_chosen["_id"])}, {"$set": {"name": new_name}})
+                            erase_lines(4)
+                            print(Fore.GREEN + "Name successfully changed!")
+                            time.sleep(2)
+                            erase_lines(1)
+                        else:
+                            erase_lines(4)
+                            print(Fore.RED + "Change not confirmed!")
+                            time.sleep(2)
+                            erase_lines(1)
+                            return None
                     case 3:
                         return
                     case 4:
