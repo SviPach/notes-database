@@ -1,8 +1,7 @@
-from pymongo.errors import DuplicateKeyError
-from classes import get_choice, erase_lines, Fore, show_user_info, change_user_info
-import time
-import msvcrt
-from bson import ObjectId
+from classes import (
+    get_choice, erase_lines, Fore, show_user_info,
+    change_user_info, DuplicateKeyError, time, msvcrt, ObjectId
+)
 
 
 def admin_menu(users, notes):

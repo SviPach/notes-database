@@ -1,5 +1,7 @@
-from classes import get_choice, erase_lines, Fore, show_user_info, change_user_info, notes_mode
-import time
+from classes import (
+    get_choice, erase_lines, Fore,
+    show_user_info, change_user_info, notes_mode, time
+)
 
 
 def user_menu(username, users, notes):

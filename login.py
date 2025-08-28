@@ -1,8 +1,8 @@
-import pymongo
-from pymongo import MongoClient
-import datetime
-from classes import admin_menu, user_menu, erase_lines, Fore, Style
-import time
+from classes import (
+    admin_menu, user_menu, erase_lines,
+    Fore, Style, pymongo, MongoClient,
+    time
+)
 
 
 global ERASER_MODE

@@ -1,9 +1,8 @@
-from classes import erase_lines, get_choice, Fore
-from bson import ObjectId
-import datetime
-import time
-import msvcrt
-from prompt_toolkit import prompt
+from classes import (
+    erase_lines, get_choice, Fore, prompt,
+    time, datetime, ObjectId, msvcrt
+)
+
 
 def show_user_info(user):
     if user is not None:
