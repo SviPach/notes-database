@@ -6,9 +6,9 @@ from classes import (
 
 def show_user_info(user):
     if user is not None:
-        print(Fore.BLUE + "User ID:", user["_id"])
-        print(Fore.BLUE + "Username:", user["username"])
-        print(Fore.BLUE + "Password:", user["password"])
+        print(Fore.BLUE + "\tUser ID:", user["_id"])
+        print(Fore.BLUE + "\tUsername:", user["username"])
+        print(Fore.BLUE + "\tPassword:", user["password"])
         print("Tap to continue...")
         msvcrt.getch()
         erase_lines(4)
@@ -20,46 +20,55 @@ def show_user_info_static(user):
         print(Fore.BLUE + "\tPassword:", user["password"])
 
 def change_user_info(user, users):
-    if user is None:
-        print(Fore.RED + "User not found!")
+    if user is not None:
+        show_user_info_static(user)
+        print(Fore.BLUE + "What to change:")
+        print("\t1. Username"
+              "\n\t2. Password"
+              "\n\t0. Cancel the operation")
+        choice = get_choice(4, 0, 2)
+        match choice:
+            case 1:
+                new_username = input(Fore.BLUE + "Enter a new username: " + Fore.RESET)
+                forbidden = set('!@#$%^&*()+={}[]|\\:;"\'<>,.?/~` ')
+                if any(c in forbidden for c in new_username) or new_username == "":
+                    erase_lines(5)
+                    print(Fore.RED + "Username contains forbidden characters!")
+                    time.sleep(2)
+                    erase_lines(1)
+                    return None
+                erase_lines(4)
+                updated_user = change_user_info_db(users, user, "username", new_username)
+                return updated_user
+            case 2:
+                new_password = input(Fore.BLUE + "Enter a new password: " + Fore.RESET)
+                updated_user = change_user_info_db(users, user, "password", new_password)
+                erase_lines(1)
+                return updated_user
+            case 0:
+                erase_lines(3)
+                print(Fore.GREEN + "Operation cancelled!")
+                time.sleep(2)
+                erase_lines(1)
+                return None
+    else:
         return None
-    show_user_info_static(user)
-    print(Fore.BLUE + "What to change:")
-    print("\t1. Username"
-          "\n\t2. Password"
-          "\n\t0. Cancel the operation")
-    choice = get_choice(4, 0, 2)
-    match choice:
-        case 1:
-            new_username = input(Fore.BLUE + "Enter a new username: " + Fore.RESET)
-            print(Fore.YELLOW + "Are you sure you want to change this user's username?")
-            updated_user = change_user_info_db(users, user, "username", new_username)
-            erase_lines(3)
-            return updated_user
-        case 2:
-            new_password = input(Fore.BLUE + "Enter a new password: " + Fore.RESET)
-            print(Fore.YELLOW + "Are you sure you want to change this user's password?")
-            updated_user = change_user_info_db(users, user, "password", new_password)
-            erase_lines(3)
-            return updated_user
-        case 0:
-            erase_lines(1)
-            print(Fore.BLUE + "Operation cancelled!")
-            time.sleep(2)
-            erase_lines(1)
-            return None
 
 def change_user_info_db(users, user, attribute, new_value):
+    print(Fore.YELLOW + f"Are you sure you want to change this user's {attribute}?")
     print("\t" + user[attribute] + " -> " + new_value)
     confirmation = input(Fore.YELLOW + "Type CONFIRM to confirm: " + Fore.RESET)
     if confirmation == "CONFIRM":
         if attribute == "username":
             user_check = users.find_one({"username": new_value})
             if user_check is not None:
+                erase_lines(3)
                 print(Fore.RED + "User with this username already exists!")
+                time.sleep(2)
+                erase_lines(1)
                 return None
         users.update_one({"_id": user["_id"]}, {"$set": {attribute: new_value}})
-        erase_lines(4)
+        erase_lines(3)
         print(Fore.GREEN + f"{attribute} successfully changed!")
         time.sleep(2)
         erase_lines(1)
@@ -69,7 +78,7 @@ def change_user_info_db(users, user, attribute, new_value):
         erase_lines(3)
         print(Fore.RED + "Change not confirmed!")
         time.sleep(2)
-        erase_lines(2)
+        erase_lines(1)
         return None
 
 def notes_mode(user, notes):
@@ -85,7 +94,7 @@ def notes_mode(user, notes):
         notes_count = notes.count_documents({"user_id": user["_id"]})
         choice = get_choice(notes_count + 3, -1, notes_count)
         if choice == -1:
-            print(Fore.BLUE + "Operation cancelled!")
+            print(Fore.GREEN + "Operation cancelled!")
             time.sleep(2)
             erase_lines(1)
 

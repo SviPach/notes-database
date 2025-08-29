@@ -23,12 +23,13 @@ def admin_menu(users, notes):
             case 2:
                 print(Fore.BLUE + "Your choice:", "Change user's information")
                 user_found = admin_find_user(users)
-                show_user_info(user_found)
                 change_user_info(user_found, users)
+                erase_lines(1)
             case 3:
                 print(Fore.BLUE + "Your choice:", "Delete a user")
                 user_to_delete = admin_find_user(users)
                 admin_delete_user(user_to_delete, users)
+                erase_lines(1)
             case 4:
                 print(Fore.BLUE + "Amount of users:", users.count_documents({}))
                 print("Tap to continue...")
@@ -38,6 +39,7 @@ def admin_menu(users, notes):
                 print(Fore.BLUE + "Your choice:", "Find a user")
                 user_found = admin_find_user(users)
                 show_user_info(user_found)
+                erase_lines(1)
             case 0:
                 log_out_message()
                 return

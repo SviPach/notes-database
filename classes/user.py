@@ -22,7 +22,9 @@ def user_menu(username, users, notes):
         choice = get_choice(5, 0, 3)
         match choice:
             case 1:
+                print(Fore.BLUE + "Your choice:", "Show your user's information")
                 show_user_info(user)
+                erase_lines(1)
             case 2:
                 print(Fore.BLUE + "Your choice:", "Change your user's information")
                 updated_user = change_user_info(user, users)
