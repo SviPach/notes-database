@@ -4,7 +4,7 @@ from classes import (
 )
 
 
-def user_menu(username, users, notes):
+def user_terminal(username, users, notes):
     user = users.find_one({"username": username})
     print(Fore.CYAN + f"---------- Welcome, {user["username"]}! ----------")
     username_was_updated = False

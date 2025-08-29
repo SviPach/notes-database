@@ -18,13 +18,13 @@ from classes.functions import (show_user_info,
 from classes.functions_admin import (admin_add_new_user,
                                      admin_delete_user,
                                      admin_find_user)
-from classes.admin import admin_menu
-from classes.user import user_menu
+from classes.admin import admin_terminal
+from classes.user import user_terminal
 
 __all__ = [
     "init", "Fore", "Back", "Style",
-    "erase_lines", "get_choice", "admin_menu",
-    "user_menu", "show_user_info_static",
+    "erase_lines", "get_choice", "admin_terminal",
+    "user_terminal", "show_user_info_static",
     "show_user_info", "change_user_info",
     "change_user_info_db", "notes_mode",
     "prompt", "ObjectId", "datetime",

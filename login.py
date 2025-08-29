@@ -1,7 +1,7 @@
 from classes import (
     Fore, Style, time, pymongo,
-    MongoClient, admin_menu,
-    user_menu, erase_lines
+    MongoClient, admin_terminal,
+    user_terminal, erase_lines
 )
 
 
