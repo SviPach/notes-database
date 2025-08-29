@@ -13,11 +13,13 @@ def show_user_info(user):
         msvcrt.getch()
         erase_lines(4)
 
+
 def show_user_info_static(user):
     if user is not None:
         print(Fore.BLUE + "\tUser ID:", user["_id"])
         print(Fore.BLUE + "\tUsername:", user["username"])
         print(Fore.BLUE + "\tPassword:", user["password"])
+
 
 def change_user_info(user, users):
     if user is not None:
@@ -29,20 +31,32 @@ def change_user_info(user, users):
         choice = get_choice(4, 0, 2)
         match choice:
             case 1:
-                new_username = input(Fore.BLUE + "Enter a new username: " + Fore.RESET)
+                new_username = input(
+                    Fore.BLUE + "Enter a new username: " + Fore.RESET
+                )
                 forbidden = set('!@#$%^&*()+={}[]|\\:;"\'<>,.?/~` ')
-                if any(c in forbidden for c in new_username) or new_username == "":
+                if (
+                        any(c in forbidden for c in new_username)
+                        or
+                        new_username == ""
+                ):
                     erase_lines(5)
                     print(Fore.RED + "Username contains forbidden characters!")
                     time.sleep(2)
                     erase_lines(1)
                     return None
                 erase_lines(4)
-                updated_user = change_user_info_db(users, user, "username", new_username)
+                updated_user = change_user_info_db(
+                    users, user, "username", new_username
+                )
                 return updated_user
             case 2:
-                new_password = input(Fore.BLUE + "Enter a new password: " + Fore.RESET)
-                updated_user = change_user_info_db(users, user, "password", new_password)
+                new_password = input(
+                    Fore.BLUE + "Enter a new password: " + Fore.RESET
+                )
+                updated_user = change_user_info_db(
+                    users, user, "password", new_password
+                )
                 erase_lines(1)
                 return updated_user
             case 0:
@@ -54,10 +68,16 @@ def change_user_info(user, users):
     else:
         return None
 
+
 def change_user_info_db(users, user, attribute, new_value):
-    print(Fore.YELLOW + f"Are you sure you want to change this user's {attribute}?")
+    print(
+        Fore.YELLOW
+        + f"Are you sure you want to change this user's {attribute}?"
+    )
     print("\t" + user[attribute] + " -> " + new_value)
-    confirmation = input(Fore.YELLOW + "Type CONFIRM to confirm: " + Fore.RESET)
+    confirmation = input(
+        Fore.YELLOW + "Type CONFIRM to confirm: " + Fore.RESET
+    )
     if confirmation == "CONFIRM":
         if attribute == "username":
             user_check = users.find_one({"username": new_value})
@@ -67,7 +87,9 @@ def change_user_info_db(users, user, attribute, new_value):
                 time.sleep(2)
                 erase_lines(1)
                 return None
-        users.update_one({"_id": user["_id"]}, {"$set": {attribute: new_value}})
+        users.update_one(
+            {"_id": user["_id"]}, {"$set": {attribute: new_value}}
+        )
         erase_lines(3)
         print(Fore.GREEN + f"{attribute} successfully changed!")
         time.sleep(2)
@@ -80,6 +102,7 @@ def change_user_info_db(users, user, attribute, new_value):
         time.sleep(2)
         erase_lines(1)
         return None
+
 
 def notes_mode(user, notes):
     notes_available = list(notes.find({"user_id": ObjectId(user["_id"])}))
@@ -99,9 +122,13 @@ def notes_mode(user, notes):
             erase_lines(1)
 
         if choice == 0:
-            note_name = input(Fore.BLUE + "Choose a name for the new note: " + Fore.RESET)
+            note_name = input(
+                Fore.BLUE + "Choose a name for the new note: " + Fore.RESET
+            )
             erase_lines(1)
-            if notes.find_one({"name": note_name, "user_id": ObjectId(user["_id"])}) is not None:
+            if notes.find_one(
+                    {"name": note_name, "user_id": ObjectId(user["_id"])}
+            ) is not None:
                 print(Fore.RED + "You already have a note with that name!")
                 time.sleep(2)
                 erase_lines(1)
@@ -128,10 +155,21 @@ def notes_mode(user, notes):
                 choice = get_choice(5, 0, 3)
                 match choice:
                     case 1:
-                        print(Fore.BLUE + f"---------- {note_chosen["name"]}:")
-                        print(Fore.BLUE + "----- Use Alt+Enter or Ctrl+Z+Enter to exit")
-                        content = prompt(default=note_chosen["content"], multiline=True)
-                        notes.update_one({"_id": ObjectId(note_chosen["_id"])}, {"$set": {"content": content}})
+                        print(
+                            Fore.BLUE
+                            + f"---------- {note_chosen["name"]}:"
+                        )
+                        print(
+                            Fore.BLUE
+                            + "----- Use Alt+Enter or Ctrl+Z+Enter to exit"
+                        )
+                        content = prompt(
+                            default=note_chosen["content"], multiline=True
+                        )
+                        notes.update_one(
+                            {"_id": ObjectId(note_chosen["_id"])},
+                            {"$set": {"content": content}}
+                        )
                         lines_amount = content.count('\n') + 1
                         erase_lines(lines_amount+2)
                         print(Fore.GREEN + "Note saved!")
@@ -139,11 +177,20 @@ def notes_mode(user, notes):
                         erase_lines(1)
                     case 2:
                         print(Fore.BLUE + f"---------- {note_chosen["name"]}:")
-                        new_name = input(Fore.BLUE + "Enter new name: " + Fore.RESET)
+                        new_name = input(
+                            Fore.BLUE + "Enter new name: " + Fore.RESET
+                        )
                         print("\t" + note_chosen["name"] + " -> " + new_name)
-                        confirmation = input(Fore.YELLOW + "Type CONFIRM to confirm: " + Fore.RESET)
+                        confirmation = input(
+                            Fore.YELLOW
+                            + "Type CONFIRM to confirm: "
+                            + Fore.RESET
+                        )
                         if confirmation == "CONFIRM":
-                            notes.update_one({"_id": ObjectId(note_chosen["_id"])}, {"$set": {"name": new_name}})
+                            notes.update_one(
+                                {"_id": ObjectId(note_chosen["_id"])},
+                                {"$set": {"name": new_name}}
+                            )
                             erase_lines(4)
                             print(Fore.GREEN + "Name successfully changed!")
                             time.sleep(2)
@@ -155,10 +202,19 @@ def notes_mode(user, notes):
                             erase_lines(1)
                     case 3:
                         print(Fore.BLUE + f"---------- {note_chosen["name"]}:")
-                        print(Fore.YELLOW + "Are you sure you want to delete this note?")
-                        confirmation = input(Fore.YELLOW + "Type CONFIRM to confirm: " + Fore.RESET)
+                        print(
+                            Fore.YELLOW
+                            + "Are you sure you want to delete this note?"
+                        )
+                        confirmation = input(
+                            Fore.YELLOW
+                            + "Type CONFIRM to confirm: "
+                            + Fore.RESET
+                        )
                         if confirmation == "CONFIRM":
-                            notes.delete_one({"_id": ObjectId(note_chosen["_id"])})
+                            notes.delete_one(
+                                {"_id": ObjectId(note_chosen["_id"])}
+                            )
                             erase_lines(3)
                             print(Fore.GREEN + "Note successfully deleted!")
                             time.sleep(2)
@@ -177,6 +233,7 @@ def notes_mode(user, notes):
                 print(Fore.RED + "Note not found!")
                 time.sleep(2)
                 erase_lines(1)
+
 
 def log_out_message():
     erase_lines(1)

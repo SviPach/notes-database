@@ -31,7 +31,9 @@ def admin_menu(users, notes):
                 admin_delete_user(user_to_delete, users)
                 erase_lines(1)
             case 4:
-                print(Fore.BLUE + "Amount of users:", users.count_documents({}))
+                print(
+                    Fore.BLUE + "Amount of users:", users.count_documents({})
+                )
                 print("Tap to continue...")
                 msvcrt.getch()
                 erase_lines(2)
@@ -43,4 +45,3 @@ def admin_menu(users, notes):
             case 0:
                 log_out_message()
                 return
-

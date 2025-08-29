@@ -11,7 +11,10 @@ def user_menu(username, users, notes):
     while True:
         if username_was_updated:
             erase_lines(1)
-            print(Fore.CYAN + f"---------- Welcome, {user["username"]}! ----------")
+            print(
+                Fore.CYAN
+                + f"---------- Welcome, {user["username"]}! ----------"
+            )
             username_was_updated = False
 
         print(Fore.BLUE + "Select an option:")
@@ -22,11 +25,16 @@ def user_menu(username, users, notes):
         choice = get_choice(5, 0, 3)
         match choice:
             case 1:
-                print(Fore.BLUE + "Your choice:", "Show your user's information")
+                print(
+                    Fore.BLUE + "Your choice:", "Show your user's information"
+                )
                 show_user_info(user)
                 erase_lines(1)
             case 2:
-                print(Fore.BLUE + "Your choice:", "Change your user's information")
+                print(
+                    Fore.BLUE
+                    + "Your choice:", "Change your user's information"
+                )
                 updated_user = change_user_info(user, users)
                 if updated_user is not None:
                     if updated_user["username"] != user["username"]:

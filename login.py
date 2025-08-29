@@ -7,6 +7,7 @@ from classes import (
 
 global ERASER_MODE
 
+
 def eraser(mode, reset=False):
     if mode:
         erase_lines(2)
@@ -27,7 +28,10 @@ users.create_index([('username', pymongo.ASCENDING)], unique=True)
 if users.count_documents({"username": "admin"}) == 0:
     users.insert_one({"username": "admin", "password": "admin000"})
 
-print(Fore.MAGENTA + Style.BRIGHT + "---------- Welcome to the notes database! ----------")
+print(
+    Fore.MAGENTA + Style.BRIGHT
+    + "---------- Welcome to the notes database! ----------"
+)
 
 logging_in = True
 ERASER_MODE = False
@@ -36,7 +40,9 @@ while logging_in:
     if first_attempt:
         print(Fore.MAGENTA + "-----Login please:")
         first_attempt = False
-    login_username = input(Fore.BLUE + "Enter your username('enter' to exit): " + Fore.RESET)
+    login_username = input(
+        Fore.BLUE + "Enter your username('enter' to exit): " + Fore.RESET
+    )
     if login_username == "":
         eraser(ERASER_MODE)
         erase_lines(1)
@@ -53,7 +59,11 @@ while logging_in:
     else:
         eraser(ERASER_MODE, True)
         while True:
-            login_password = input(Fore.BLUE + "Enter the password('enter' to exit): " + Fore.RESET)
+            login_password = input(
+                Fore.BLUE
+                + "Enter the password('enter' to exit): "
+                + Fore.RESET
+            )
             if login_password == "":
                 eraser(ERASER_MODE, True)
                 print(Fore.BLUE + "Login canceled!")
