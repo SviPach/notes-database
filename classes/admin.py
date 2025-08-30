@@ -28,7 +28,7 @@ def admin_terminal(users, notes):
             case 3:
                 print(Fore.BLUE + "Your choice:", "Delete a user")
                 user_to_delete = admin_find_user(users)
-                admin_delete_user(user_to_delete, users)
+                admin_delete_user(user_to_delete, users, notes)
                 erase_lines(1)
             case 4:
                 users_amount = users.count_documents({})

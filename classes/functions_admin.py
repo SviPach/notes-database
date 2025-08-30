@@ -46,20 +46,23 @@ def admin_add_new_user(users):
     erase_lines(8)
 
 
-def admin_delete_user(user_to_delete, users):
+def admin_delete_user(user_to_delete, users, notes):
     if user_to_delete is not None:
         print(
             Fore.YELLOW
             + "Are you sure you want to delete:",
             user_to_delete["username"], "?"
         )
+        print(Fore.YELLOW + "User's notes will be deleted!")
         confirmation = input(
             Fore.YELLOW + "Type CONFIRM to confirm: " + Fore.RESET
         )
         if confirmation == "CONFIRM":
+            notes.delete_many({"user_id": ObjectId(user_to_delete["_id"])})
+
             username = user_to_delete["username"]
             users.delete_one({"username": username})
-            erase_lines(2)
+            erase_lines(3)
             print(
                 Fore.GREEN + "User",
                 username,
@@ -68,7 +71,7 @@ def admin_delete_user(user_to_delete, users):
             time.sleep(2)
             erase_lines(1)
         else:
-            erase_lines(2)
+            erase_lines(3)
             print(Fore.RED + "Deletion not confirmed!")
             time.sleep(2)
             erase_lines(1)
