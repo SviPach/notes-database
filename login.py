@@ -5,7 +5,7 @@ from classes import (
 )
 
 
-global ERASER_MODE
+ERASER_MODE = False
 
 
 def eraser(mode, reset=False):
@@ -16,7 +16,6 @@ def eraser(mode, reset=False):
     if reset:
         global ERASER_MODE
         ERASER_MODE = False
-
 
 client = MongoClient()
 database = client.mydb
@@ -33,58 +32,86 @@ print(
     + "---------- Welcome to the notes database! ----------"
 )
 
-logging_in = True
-ERASER_MODE = False
-first_attempt = True
-while logging_in:
-    if first_attempt:
-        print(Fore.MAGENTA + "-----Login please:")
-        first_attempt = False
-    login_username = input(
-        Fore.BLUE + "Enter your username('enter' to exit): " + Fore.RESET
-    )
-    if login_username == "":
-        eraser(ERASER_MODE)
-        erase_lines(1)
-        print(Fore.MAGENTA + Style.BRIGHT + "Exiting...")
-        break
 
-    user = users.find_one({"username": login_username})
+def login_terminal(admin_entry=False):
+    global ERASER_MODE
+    logging_in = True
+    first_attempt = True
+    while logging_in:
+        if first_attempt:
+            print(Fore.MAGENTA + "-----Login please:")
+            first_attempt = False
+        login_username = input(
+            Fore.BLUE + "Enter your username('enter' to exit): " + Fore.RESET
+        )
+        if login_username == "":
+            eraser(ERASER_MODE)
+            erase_lines(1)
+            print(Fore.MAGENTA + Style.BRIGHT + "Exiting...")
+            break
+        if login_username == "admin" and admin_entry:
+            erase_lines(1)
+            print(Fore.RED + "Denied")
+            time.sleep(2)
+            erase_lines(1)
+            continue
 
-    if user is None:
-        eraser(ERASER_MODE)
-        ERASER_MODE = True
-        print(Fore.RED + "Invalid username! Try again.")
-        continue
-    else:
-        eraser(ERASER_MODE, True)
-        while True:
-            login_password = input(
-                Fore.BLUE
-                + "Enter the password('enter' to exit): "
-                + Fore.RESET
-            )
-            if login_password == "":
-                eraser(ERASER_MODE, True)
-                print(Fore.BLUE + "Login canceled!")
-                time.sleep(1)
-                erase_lines(1)
-                break
-            elif user.get("password") != login_password:
-                eraser(ERASER_MODE)
-                ERASER_MODE = True
-                print(Fore.RED + "Invalid password! Try again.")
-                continue
-            else:
-                erase_lines(1)
-                eraser(ERASER_MODE, True)
-                print(Fore.GREEN + "Login successful!")
-                time.sleep(2)
-                erase_lines(1)
-                first_attempt = True
-                if login_username == "admin":
-                    admin_terminal(users, notes)
-                else:
+        user = users.find_one({"username": login_username})
+
+        if user is None:
+            eraser(ERASER_MODE)
+            ERASER_MODE = True
+            print(Fore.RED + "Invalid username! Try again.")
+            continue
+        else:
+            eraser(ERASER_MODE, True)
+            while True:
+                if admin_entry:
+                    erase_lines(1)
+                    print(Fore.GREEN + "Login successful!")
+                    time.sleep(2)
+                    erase_lines(1)
                     user_terminal(login_username, users, notes)
-
-                break
+                    first_attempt = True
+                    break
+                else:
+                    login_password = input(
+                        Fore.BLUE
+                        + "Enter the password('enter' to exit): "
+                        + Fore.RESET
+                    )
+                    if login_password == "":
+                        eraser(ERASER_MODE, True)
+                        print(Fore.BLUE + "Login canceled!")
+                        time.sleep(1)
+                        erase_lines(1)
+                        break
+                    elif user.get("password") != login_password:
+                        eraser(ERASER_MODE)
+                        ERASER_MODE = True
+                        print(Fore.RED + "Invalid password! Try again.")
+                        continue
+                    else:
+                        erase_lines(1)
+                        eraser(ERASER_MODE, True)
+                        print(Fore.GREEN + "Login successful!")
+                        time.sleep(2)
+                        erase_lines(1)
+                        first_attempt = True
+                        if login_username == "admin":
+                            admin_login = admin_terminal(users, notes)
+                            if admin_login == 1:
+                                login_terminal(admin_entry=True)
+                                erase_lines(2)
+                                print(
+                                    Fore.CYAN
+                                    + "ADMIN LOGOUT..."
+                                )
+                                time.sleep(2)
+                                erase_lines(1)
+                                break
+                        else:
+                            user_terminal(login_username, users, notes)
+                            break
+                        break
+login_terminal()

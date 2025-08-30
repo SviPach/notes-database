@@ -3,7 +3,8 @@ from classes import (
     change_user_info, log_out_message,
     admin_find_user, admin_delete_user,
     admin_add_new_user, show_user_info,
-    admin_restore_deleted_user
+    admin_restore_deleted_user, Style,
+    time
 )
 
 
@@ -17,9 +18,10 @@ def admin_terminal(users, notes):
               "\n\t3. Delete a user"
               "\n\t4. List of users"
               "\n\t5. Find a user"
-              "\n\t6. Restore last deleted user"
+              "\n\t6. Admin login terminal"
+              "\n\t7. Restore last deleted user"
               "\n\t0. Logout")
-        choice = get_choice(8, 0, 6)
+        choice = get_choice(9, 0, 7)
         match choice:
             case 1:
                 admin_add_new_user(users)
@@ -56,6 +58,16 @@ def admin_terminal(users, notes):
                 msvcrt.getch()
                 erase_lines(8)
             case 6:
+                erase_lines(1)
+                print(Fore.CYAN + "Logging in as admin...")
+                time.sleep(2)
+                erase_lines(1)
+                print(
+                    Fore.CYAN + Style.BRIGHT
+                    + "---------- ADMIN LOGIN ----------"
+                )
+                return 1
+            case 7:
                 print(Fore.BLUE + "Your choice:", "Restore last deleted user")
                 result = admin_restore_deleted_user(deleted_user, users, notes)
                 if result == 1:
@@ -63,4 +75,4 @@ def admin_terminal(users, notes):
                 erase_lines(1)
             case 0:
                 log_out_message()
-                return
+                return 0
