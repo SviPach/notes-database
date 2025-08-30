@@ -18,7 +18,16 @@ def admin_add_new_user(users):
         time.sleep(2)
         erase_lines(3)
         return
-    new_user_password = input(Fore.BLUE + "\tEnter a password: " + Fore.RESET)
+    while True:
+        new_user_password = input(Fore.BLUE + "\tEnter a password: " + Fore.RESET)
+        if new_user_password == "":
+            erase_lines(1)
+            print(Fore.RED + "Password is empty! Try again!")
+            time.sleep(2)
+            erase_lines(1)
+            continue
+        else:
+            break
     new_user_date_created = datetime.datetime.now()
     try:
         new_user_id = users.insert_one(
@@ -58,6 +67,8 @@ def admin_delete_user(user_to_delete, users, notes):
             Fore.YELLOW + "Type CONFIRM to confirm: " + Fore.RESET
         )
         if confirmation == "CONFIRM":
+            save_user = user_to_delete.copy()
+            save_user_notes = list(notes.find({"user_id": ObjectId(user_to_delete["_id"])}))
             notes.delete_many({"user_id": ObjectId(user_to_delete["_id"])})
 
             username = user_to_delete["username"]
@@ -70,11 +81,13 @@ def admin_delete_user(user_to_delete, users, notes):
             )
             time.sleep(2)
             erase_lines(1)
+            return [save_user, save_user_notes]
         else:
             erase_lines(3)
             print(Fore.RED + "Deletion not confirmed!")
             time.sleep(2)
             erase_lines(1)
+            return None
 
 
 def admin_find_user(users):
@@ -117,3 +130,61 @@ def admin_find_user(users):
     time.sleep(2)
     erase_lines(1)
     return user_found
+
+
+def admin_restore_deleted_user(deleted_user, users, notes):
+    if len(deleted_user) != 0:
+        while users.find_one({"username": deleted_user[0]["username"]}):
+            new_username = input(
+                Fore.YELLOW
+                + "Impossible to restore. Need a new username: "
+                + Fore.RESET
+            )
+            if users.find_one({"username": new_username}):
+                erase_lines(1)
+                print(
+                    Fore.RED
+                    + "Username already exists."
+                      "Try another one."
+                )
+                time.sleep(2)
+                erase_lines(1)
+                continue
+            else:
+                deleted_user[0]["username"] = new_username
+                break
+
+        user_to_restore = deleted_user[0].copy()
+        notes_to_restore = deleted_user[1]
+
+        print(
+            Fore.YELLOW
+            + "Are you sure you want to restore:",
+            user_to_restore["username"], '?'
+        )
+        confirmation = input(
+            Fore.YELLOW + "Type CONFIRM to confirm: " + Fore.RESET
+        )
+        if confirmation == "CONFIRM":
+            user_to_restore.pop("_id", None)
+            new_user_id = users.insert_one(user_to_restore).inserted_id
+            for note in notes_to_restore:
+                note.pop("_id", None)
+                note["user_id"] = new_user_id
+                notes.insert_one(note)
+            erase_lines(2)
+            print(Fore.GREEN + "User restored.")
+            time.sleep(2)
+            erase_lines(1)
+            return 1
+        else:
+            erase_lines(2)
+            print(Fore.RED + "User restore not confirmed!")
+            time.sleep(2)
+            erase_lines(1)
+            return None
+    else:
+        print(Fore.RED + "You have not deleted any user in this session.")
+        time.sleep(2)
+        erase_lines(1)
+        return None

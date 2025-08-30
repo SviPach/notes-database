@@ -2,12 +2,14 @@ from classes import (
     Fore, msvcrt, get_choice, erase_lines,
     change_user_info, log_out_message,
     admin_find_user, admin_delete_user,
-    admin_add_new_user, show_user_info
+    admin_add_new_user, show_user_info,
+    admin_restore_deleted_user
 )
 
 
 def admin_terminal(users, notes):
     print(Fore.CYAN + "---------- Welcome, admin! ----------")
+    deleted_user = []
     while True:
         print(Fore.BLUE + "Select an option:")
         print("\t1. Add new user"
@@ -15,8 +17,9 @@ def admin_terminal(users, notes):
               "\n\t3. Delete a user"
               "\n\t4. List of users"
               "\n\t5. Find a user"
+              "\n\t6. Restore last deleted user"
               "\n\t0. Logout")
-        choice = get_choice(7, 0, 5)
+        choice = get_choice(8, 0, 6)
         match choice:
             case 1:
                 admin_add_new_user(users)
@@ -28,7 +31,7 @@ def admin_terminal(users, notes):
             case 3:
                 print(Fore.BLUE + "Your choice:", "Delete a user")
                 user_to_delete = admin_find_user(users)
-                admin_delete_user(user_to_delete, users, notes)
+                deleted_user = admin_delete_user(user_to_delete, users, notes)
                 erase_lines(1)
             case 4:
                 users_amount = users.count_documents({})
@@ -52,6 +55,12 @@ def admin_terminal(users, notes):
                 print("Tap to continue...")
                 msvcrt.getch()
                 erase_lines(8)
+            case 6:
+                print(Fore.BLUE + "Your choice:", "Restore last deleted user")
+                result = admin_restore_deleted_user(deleted_user, users, notes)
+                if result == 1:
+                    deleted_user = []
+                erase_lines(1)
             case 0:
                 log_out_message()
                 return

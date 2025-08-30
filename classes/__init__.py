@@ -16,7 +16,8 @@ from classes.functions import (show_user_info,
                                log_out_message)
 from classes.functions_admin import (admin_add_new_user,
                                      admin_delete_user,
-                                     admin_find_user)
+                                     admin_find_user,
+                                     admin_restore_deleted_user)
 from classes.admin import admin_terminal
 from classes.user import user_terminal
 
@@ -30,5 +31,5 @@ __all__ = [
     "time", "msvcrt", "DuplicateKeyError",
     "pymongo", "MongoClient", "log_out_message",
     "admin_add_new_user", "admin_delete_user",
-    "admin_find_user"
+    "admin_find_user", "admin_restore_deleted_user"
 ]
