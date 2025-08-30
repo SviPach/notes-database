@@ -5,8 +5,21 @@ from classes import (
     show_user_info, indented_io
 )
 
+
 @indented_io(Fore.MAGENTA + "  | ")
 def user_terminal(username, users, notes):
+    """
+    User terminal.
+
+    Parameters
+    ----------
+    username: str
+        User's username.
+    users : pymongo.collection.Collection
+        MongoDB collection containing user documents.
+    notes : pymongo.collection.Collection
+        MongoDB collection containing notes documents.
+    """
     user = users.find_one({"username": username})
     print(Fore.CYAN + f"---------- Welcome, {user["username"]}! ----------")
     username_was_updated = False

@@ -6,6 +6,14 @@ from classes import (
 
 
 def admin_add_new_user(users):
+    """
+    Add a new user to the database.
+
+    Parameters
+    ----------
+    users : pymongo.collection.Collection
+        MongoDB collection containing user documents.
+    """
     print(Fore.BLUE + "Your choice:", "Add new user")
     new_user_username = input(Fore.BLUE + "\tEnter a username: " + Fore.RESET)
     forbidden = set('!@#$%^&*()+={}[]|\\:;"\'<>,.?/~` ')
@@ -19,7 +27,9 @@ def admin_add_new_user(users):
         erase_lines(3)
         return
     while True:
-        new_user_password = input(Fore.BLUE + "\tEnter a password: " + Fore.RESET)
+        new_user_password = input(
+            Fore.BLUE + "\tEnter a password: " + Fore.RESET
+        )
         if new_user_password == "":
             erase_lines(1)
             print(Fore.RED + "Password is empty! Try again!")
@@ -56,6 +66,23 @@ def admin_add_new_user(users):
 
 
 def admin_delete_user(user_to_delete, users, notes):
+    """
+    Delete a user from the database.
+
+    Parameters
+    ----------
+    user_to_delete : dict
+        A MongoDB user document we want to delete.
+    users : pymongo.collection.Collection
+        MongoDB collection containing user documents.
+    notes : pymongo.collection.Collection
+        MongoDB collection containing notes documents.
+
+    Returns
+    -------
+    list or None
+        Information about user and his notes if deleted, otherwise None.
+    """
     if user_to_delete is not None:
         print(
             Fore.YELLOW
@@ -68,7 +95,11 @@ def admin_delete_user(user_to_delete, users, notes):
         )
         if confirmation == "CONFIRM":
             save_user = user_to_delete.copy()
-            save_user_notes = list(notes.find({"user_id": ObjectId(user_to_delete["_id"])}))
+            save_user_notes = list(
+                notes.find(
+                    {"user_id": ObjectId(user_to_delete["_id"])}
+                )
+            )
             notes.delete_many({"user_id": ObjectId(user_to_delete["_id"])})
 
             username = user_to_delete["username"]
@@ -91,6 +122,19 @@ def admin_delete_user(user_to_delete, users, notes):
 
 
 def admin_find_user(users):
+    """
+    Find a user in the database.
+
+    Parameters
+    ----------
+    users : pymongo.collection.Collection
+        MongoDB collection containing user documents.
+
+    Returns
+    -------
+    dict or None
+        The user dictionary if found, otherwise None.
+    """
     print(Fore.BLUE + "Find a user by:")
     print("\t1. Username"
           "\n\t2. User ID"
@@ -133,6 +177,23 @@ def admin_find_user(users):
 
 
 def admin_restore_deleted_user(deleted_user, users, notes):
+    """
+    Restore last deleted user in the current session.
+
+    Parameters
+    ----------
+    deleted_user : dict
+        A previously deleted MongoDB user document (saved before deletion).
+    users : pymongo.collection.Collection
+        MongoDB collection containing user documents.
+    notes : pymongo.collection.Collection
+        MongoDB collection containing notes documents.
+
+    Returns
+    -------
+    int or None
+        Returns 1 if deleted user was successfully restored, otherwise None.
+    """
     if len(deleted_user) != 0:
         while users.find_one({"username": deleted_user[0]["username"]}):
             new_username = input(

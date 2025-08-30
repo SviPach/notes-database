@@ -1,5 +1,6 @@
 import builtins
 
+
 def indented_io(prefix="    "):
     def decorator(func):
         def wrapper(*args, enable=True, **kwargs):

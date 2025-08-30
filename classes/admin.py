@@ -9,6 +9,23 @@ from classes import (
 
 
 def admin_terminal(users, notes):
+    """
+    Admin terminal.
+
+    Parameters
+    ----------
+    users : pymongo.collection.Collection
+        MongoDB collection containing user documents.
+    notes : pymongo.collection.Collection
+        MongoDB collection containing notes documents.
+
+    Returns
+    -------
+    int
+        Status code:
+            0 — normal exit from admin terminal
+            1 — admin requested login as another user
+    """
     print(Fore.CYAN + "---------- Welcome, admin! ----------")
     deleted_user = []
     while True:

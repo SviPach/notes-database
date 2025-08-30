@@ -9,6 +9,7 @@ ERASER_MODE = False
 
 
 def eraser(mode, reset=False):
+    """ Console eraser supporting tool. """
     if mode:
         erase_lines(2)
     else:
@@ -16,6 +17,7 @@ def eraser(mode, reset=False):
     if reset:
         global ERASER_MODE
         ERASER_MODE = False
+
 
 client = MongoClient()
 database = client.mydb
@@ -34,6 +36,14 @@ print(
 
 
 def login_terminal(admin_entry=False):
+    """
+    Login terminal.
+
+    Parameters
+    ----------
+    admin_entry : bool
+        Defines if the terminal starts by admin's request.
+    """
     global ERASER_MODE
     logging_in = True
     first_attempt = True
@@ -112,9 +122,15 @@ def login_terminal(admin_entry=False):
                                 break
                         else:
                             if admin_entry:
-                                user_terminal(login_username, users, notes, enable=True)
+                                user_terminal(
+                                    login_username, users, notes, enable=True
+                                )
                             else:
-                                user_terminal(login_username, users, notes, enable=False)
+                                user_terminal(
+                                    login_username, users, notes, enable=False
+                                )
                             break
                         break
+
+
 login_terminal()

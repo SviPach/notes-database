@@ -5,6 +5,14 @@ from classes import (
 
 
 def show_user_info(user):
+    """
+    Show user info.
+
+    Parameters
+    ----------
+    user : dict
+        A MongoDB document representing a user (as returned by find_one()).
+    """
     if user is not None:
         print(Fore.BLUE + "\tUser ID:", user["_id"])
         print(Fore.BLUE + "\tUsername:", user["username"])
@@ -15,6 +23,21 @@ def show_user_info(user):
 
 
 def change_user_info(user, users):
+    """
+    A menu of options to change user info.
+
+    Parameters
+    ----------
+    user : dict
+        A MongoDB document representing a user (as returned by find_one()).
+    users : pymongo.collection.Collection
+        MongoDB collection containing user documents.
+
+    Returns
+    -------
+    dict or None
+        User to update document if changes were applied, otherwise None.
+    """
     if user is not None:
         show_user_info(user)
         print(Fore.BLUE + "What to change:")
@@ -74,6 +97,25 @@ def change_user_info(user, users):
 
 
 def change_user_info_db(users, user, attribute, new_value):
+    """
+    Change user's information in database.
+
+    Parameters
+    ----------
+    users : pymongo.collection.Collection
+        MongoDB collection containing user documents.
+    user : dict
+        A MongoDB document representing a user (as returned by find_one()).
+    attribute : str
+        Attribute to change.
+    new_value : str
+        New value of the attribute.
+
+    Returns
+    -------
+    dict or None
+        Updated user document if changes were applied, otherwise None.
+    """
     print(
         Fore.YELLOW
         + f"Are you sure you want to change this user's {attribute}?"
@@ -112,6 +154,16 @@ def change_user_info_db(users, user, attribute, new_value):
 
 
 def notes_mode(user, notes):
+    """
+    User's notes mode.
+
+    Parameters
+    ----------
+    user : dict
+        A MongoDB document representing a user (as returned by find_one()).
+    notes : pymongo.collection.Collection
+        MongoDB collection containing notes documents.
+    """
     notes_available = list(notes.find({"user_id": ObjectId(user["_id"])}))
     if notes_available is not None:
         print(Fore.BLUE + "Choose a note:")
@@ -243,6 +295,7 @@ def notes_mode(user, notes):
 
 
 def log_out_message():
+    """ Message when logging out. """
     erase_lines(1)
     print(Fore.GREEN + "Successfully logged out!")
     time.sleep(2)
