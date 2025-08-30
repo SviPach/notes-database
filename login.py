@@ -81,7 +81,11 @@ def login_terminal(admin_entry=False):
                     print(Fore.GREEN + "Login successful!")
                     time.sleep(2)
                     erase_lines(1)
-                    user_terminal(login_username, users, notes)
+                    user_terminal(
+                        username=login_username,
+                        users=users,
+                        notes=notes
+                    )
                     first_attempt = True
                     break
                 else:
@@ -91,7 +95,7 @@ def login_terminal(admin_entry=False):
                         + Fore.RESET
                     )
                     if login_password == "":
-                        eraser(ERASER_MODE, True)
+                        eraser(ERASER_MODE, reset=True)
                         print(Fore.BLUE + "Login canceled!")
                         time.sleep(1)
                         erase_lines(1)
@@ -103,13 +107,16 @@ def login_terminal(admin_entry=False):
                         continue
                     else:
                         erase_lines(1)
-                        eraser(ERASER_MODE, True)
+                        eraser(ERASER_MODE, reset=True)
                         print(Fore.GREEN + "Login successful!")
                         time.sleep(2)
                         erase_lines(1)
                         first_attempt = True
                         if login_username == "admin":
-                            admin_login = admin_terminal(users, notes)
+                            admin_login = admin_terminal(
+                                users=users,
+                                notes=notes
+                            )
                             if admin_login == 1:
                                 login_terminal(admin_entry=True)
                                 erase_lines(2)
@@ -123,11 +130,17 @@ def login_terminal(admin_entry=False):
                         else:
                             if admin_entry:
                                 user_terminal(
-                                    login_username, users, notes, enable=True
+                                    username=login_username,
+                                    users=users,
+                                    notes=notes,
+                                    enable=True
                                 )
                             else:
                                 user_terminal(
-                                    login_username, users, notes, enable=False
+                                    username=login_username,
+                                    users=users,
+                                    notes=notes,
+                                    enable=False
                                 )
                             break
                         break

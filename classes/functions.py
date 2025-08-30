@@ -39,7 +39,7 @@ def change_user_info(user, users):
         User to update document if changes were applied, otherwise None.
     """
     if user is not None:
-        show_user_info(user)
+        show_user_info(user=user)
         print(Fore.BLUE + "What to change:")
         print("\t1. Username")
         print("\t2. Password")
@@ -66,7 +66,10 @@ def change_user_info(user, users):
                 else:
                     erase_lines(7)
                     updated_user = change_user_info_db(
-                        users, user, "username", new_username
+                        users=users,
+                        user=user,
+                        attribute="username",
+                        new_value=new_username
                     )
                     return updated_user
             case _ if choice in range(2, 5):
@@ -83,7 +86,10 @@ def change_user_info(user, users):
                 )
                 erase_lines(7)
                 updated_user = change_user_info_db(
-                    users, user, attribute, new_value
+                    users=users,
+                    user=user,
+                    attribute=attribute,
+                    new_value=new_value
                 )
                 return updated_user
             case 0:

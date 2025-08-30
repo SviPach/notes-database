@@ -43,7 +43,7 @@ def user_terminal(username, users, notes):
                 print(
                     Fore.BLUE + "Your choice:", "Show your user's information"
                 )
-                show_user_info(user)
+                show_user_info(user=user)
                 print("Tap to continue...")
                 msvcrt.getch()
                 erase_lines(8)
@@ -52,14 +52,14 @@ def user_terminal(username, users, notes):
                     Fore.BLUE
                     + "Your choice:", "Change your user's information"
                 )
-                updated_user = change_user_info(user, users)
+                updated_user = change_user_info(user=user, users=users)
                 if updated_user is not None:
                     if updated_user["username"] != user["username"]:
                         username_was_updated = True
                     user = updated_user
                 erase_lines(1)
             case 3:
-                notes_mode(user, notes)
+                notes_mode(user=user, notes=notes)
             case 0:
                 log_out_message()
                 return

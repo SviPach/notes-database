@@ -41,16 +41,23 @@ def admin_terminal(users, notes):
         choice = get_choice(9, 0, 7)
         match choice:
             case 1:
-                admin_add_new_user(users)
+                admin_add_new_user(users=users)
             case 2:
                 print(Fore.BLUE + "Your choice:", "Change user's information")
-                user_found = admin_find_user(users)
-                change_user_info(user_found, users)
+                user_found = admin_find_user(users=users)
+                change_user_info(
+                    user=user_found,
+                    users=users
+                )
                 erase_lines(1)
             case 3:
                 print(Fore.BLUE + "Your choice:", "Delete a user")
-                user_to_delete = admin_find_user(users)
-                deleted_user = admin_delete_user(user_to_delete, users, notes)
+                user_to_delete = admin_find_user(users=users)
+                deleted_user = admin_delete_user(
+                    user_to_delete=user_to_delete,
+                    users=users,
+                    notes=notes
+                )
                 erase_lines(1)
             case 4:
                 users_amount = users.count_documents({})
@@ -69,8 +76,8 @@ def admin_terminal(users, notes):
                 erase_lines(users_amount + 3)
             case 5:
                 print(Fore.BLUE + "Your choice:", "Find a user")
-                user_found = admin_find_user(users)
-                show_user_info(user_found)
+                user_found = admin_find_user(users=users)
+                show_user_info(user=user_found)
                 print("Tap to continue...")
                 msvcrt.getch()
                 erase_lines(8)
@@ -86,7 +93,11 @@ def admin_terminal(users, notes):
                 return 1
             case 7:
                 print(Fore.BLUE + "Your choice:", "Restore last deleted user")
-                result = admin_restore_deleted_user(deleted_user, users, notes)
+                result = admin_restore_deleted_user(
+                    deleted_user=deleted_user,
+                    users=users,
+                    notes=notes
+                )
                 if result == 1:
                     deleted_user = []
                 erase_lines(1)

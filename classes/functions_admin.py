@@ -59,7 +59,7 @@ def admin_add_new_user(users):
     erase_lines(3)
     new_user = users.find_one({"_id": ObjectId(new_user_id)})
     print(Fore.GREEN + "New user added:")
-    show_user_info(new_user)
+    show_user_info(user=new_user)
     print("Tap to continue...")
     msvcrt.getch()
     erase_lines(8)
