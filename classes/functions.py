@@ -18,11 +18,11 @@ def change_user_info(user, users):
     if user is not None:
         show_user_info(user)
         print(Fore.BLUE + "What to change:")
-        print("\t1. Username"
-              "\n\t2. Password"
-              "\n\t3. Age"
-              "\n\t4. E-mail"
-              "\n\t0. Cancel the operation")
+        print("\t1. Username")
+        print("\t2. Password")
+        print("\t3. Age")
+        print("\t4. E-mail")
+        print("\t0. Cancel the operation")
         choice = get_choice(6, 0, 4)
         match choice:
             case 1:
@@ -119,8 +119,8 @@ def notes_mode(user, notes):
         for note in notes_available:
             print(f"\t{i}. {note["name"]}")
             i += 1
-        print("\t0. Create a new note"
-              "\n\t-1. Cancel the operation")
+        print("\t0. Create a new note")
+        print("\t-1. Cancel the operation")
         notes_count = notes.count_documents({"user_id": user["_id"]})
         choice = get_choice(notes_count + 3, -1, notes_count)
         if choice == -1:
@@ -155,10 +155,10 @@ def notes_mode(user, notes):
             note_chosen = notes_available[choice - 1]
             if note_chosen is not None:
                 print(Fore.BLUE + "Choose an action:")
-                print("\t1. Open"
-                      "\n\t2. Rename"
-                      "\n\t3. Delete"
-                      "\n\t0. Exit")
+                print("\t1. Open")
+                print("\t2. Rename")
+                print("\t3. Delete")
+                print("\t0. Exit")
                 choice = get_choice(5, 0, 3)
                 match choice:
                     case 1:

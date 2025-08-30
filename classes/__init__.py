@@ -1,6 +1,7 @@
 from colorama import init, Fore, Back, Style
 from classes.line_eraser import erase_lines
 from classes.get_choice import get_choice
+from classes.utils import indented_io
 from prompt_toolkit import prompt
 from bson import ObjectId
 import datetime
@@ -25,7 +26,7 @@ __all__ = [
     "init", "Fore", "Back", "Style",
     "erase_lines", "get_choice", "admin_terminal",
     "user_terminal", "show_user_info",
-    "change_user_info",
+    "change_user_info", "indented_io",
     "change_user_info_db", "notes_mode",
     "prompt", "ObjectId", "datetime",
     "time", "msvcrt", "DuplicateKeyError",

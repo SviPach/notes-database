@@ -2,10 +2,10 @@ from classes import (
     Fore, get_choice, erase_lines,
     change_user_info, notes_mode,
     log_out_message, msvcrt,
-    show_user_info
+    show_user_info, indented_io
 )
 
-
+@indented_io(Fore.MAGENTA + "  | ")
 def user_terminal(username, users, notes):
     user = users.find_one({"username": username})
     print(Fore.CYAN + f"---------- Welcome, {user["username"]}! ----------")
@@ -20,10 +20,10 @@ def user_terminal(username, users, notes):
             username_was_updated = False
 
         print(Fore.BLUE + "Select an option:")
-        print("\t1. Show your user's information"
-              "\n\t2. Change your user's information"
-              "\n\t3. Notes"
-              "\n\t0. Logout")
+        print("\t1. Show your user's information")
+        print("\t2. Change your user's information")
+        print("\t3. Notes")
+        print("\t0. Logout")
         choice = get_choice(5, 0, 3)
         match choice:
             case 1:

@@ -111,7 +111,10 @@ def login_terminal(admin_entry=False):
                                 erase_lines(1)
                                 break
                         else:
-                            user_terminal(login_username, users, notes)
+                            if admin_entry:
+                                user_terminal(login_username, users, notes, enable=True)
+                            else:
+                                user_terminal(login_username, users, notes, enable=False)
                             break
                         break
 login_terminal()
