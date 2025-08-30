@@ -1,6 +1,8 @@
 from classes import (
-    Fore, get_choice, erase_lines, show_user_info,
-    change_user_info, notes_mode, log_out_message
+    Fore, get_choice, erase_lines,
+    change_user_info, notes_mode,
+    log_out_message, msvcrt,
+    show_user_info
 )
 
 
@@ -29,7 +31,9 @@ def user_terminal(username, users, notes):
                     Fore.BLUE + "Your choice:", "Show your user's information"
                 )
                 show_user_info(user)
-                erase_lines(1)
+                print("Tap to continue...")
+                msvcrt.getch()
+                erase_lines(8)
             case 2:
                 print(
                     Fore.BLUE

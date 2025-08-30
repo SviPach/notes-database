@@ -1,6 +1,7 @@
 from classes import (
     Fore, time, DuplicateKeyError,
-    ObjectId, erase_lines, get_choice, show_user_info
+    ObjectId, erase_lines, get_choice,
+    datetime, msvcrt, show_user_info
 )
 
 
@@ -18,9 +19,17 @@ def admin_add_new_user(users):
         erase_lines(3)
         return
     new_user_password = input(Fore.BLUE + "\tEnter a password: " + Fore.RESET)
+    new_user_date_created = datetime.datetime.now()
     try:
         new_user_id = users.insert_one(
-            {"username": new_user_username, "password": new_user_password}
+            {
+                "username": new_user_username,
+                "password": new_user_password,
+                "age": None,
+                "email": None,
+                "date_birth": None,
+                "date_created": new_user_date_created
+            }
         ).inserted_id
     except DuplicateKeyError:
         erase_lines(3)
@@ -32,7 +41,9 @@ def admin_add_new_user(users):
     new_user = users.find_one({"_id": ObjectId(new_user_id)})
     print(Fore.GREEN + "New user added:")
     show_user_info(new_user)
-    erase_lines(1)
+    print("Tap to continue...")
+    msvcrt.getch()
+    erase_lines(8)
 
 
 def admin_delete_user(user_to_delete, users):

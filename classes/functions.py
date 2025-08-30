@@ -1,6 +1,6 @@
 from classes import (
     erase_lines, get_choice, Fore, prompt,
-    time, datetime, ObjectId, msvcrt
+    time, datetime, ObjectId
 )
 
 
@@ -9,26 +9,21 @@ def show_user_info(user):
         print(Fore.BLUE + "\tUser ID:", user["_id"])
         print(Fore.BLUE + "\tUsername:", user["username"])
         print(Fore.BLUE + "\tPassword:", user["password"])
-        print("Tap to continue...")
-        msvcrt.getch()
-        erase_lines(4)
-
-
-def show_user_info_static(user):
-    if user is not None:
-        print(Fore.BLUE + "\tUser ID:", user["_id"])
-        print(Fore.BLUE + "\tUsername:", user["username"])
-        print(Fore.BLUE + "\tPassword:", user["password"])
+        print(Fore.BLUE + "\tAge:", user["age"])
+        print(Fore.BLUE + "\tE-mail:", user["email"])
+        print(Fore.BLUE + "\tDate created:", user["date_created"])
 
 
 def change_user_info(user, users):
     if user is not None:
-        show_user_info_static(user)
+        show_user_info(user)
         print(Fore.BLUE + "What to change:")
         print("\t1. Username"
               "\n\t2. Password"
+              "\n\t3. Age"
+              "\n\t4. E-mail"
               "\n\t0. Cancel the operation")
-        choice = get_choice(4, 0, 2)
+        choice = get_choice(6, 0, 4)
         match choice:
             case 1:
                 new_username = input(
@@ -40,27 +35,36 @@ def change_user_info(user, users):
                         or
                         new_username == ""
                 ):
-                    erase_lines(5)
+                    erase_lines(7)
                     print(Fore.RED + "Username contains forbidden characters!")
                     time.sleep(2)
                     erase_lines(1)
                     return None
-                erase_lines(4)
+                else:
+                    erase_lines(7)
+                    updated_user = change_user_info_db(
+                        users, user, "username", new_username
+                    )
+                    return updated_user
+            case _ if choice in range(2, 5):
+                attribute = ""
+                if choice == 2:
+                    attribute = "password"
+                elif choice == 3:
+                    attribute = "age"
+                elif choice == 4:
+                    attribute = "email"
+
+                new_value = input(
+                    Fore.BLUE + f"Enter a new {attribute}: " + Fore.RESET
+                )
+                erase_lines(7)
                 updated_user = change_user_info_db(
-                    users, user, "username", new_username
+                    users, user, attribute, new_value
                 )
-                return updated_user
-            case 2:
-                new_password = input(
-                    Fore.BLUE + "Enter a new password: " + Fore.RESET
-                )
-                updated_user = change_user_info_db(
-                    users, user, "password", new_password
-                )
-                erase_lines(1)
                 return updated_user
             case 0:
-                erase_lines(3)
+                erase_lines(6)
                 print(Fore.GREEN + "Operation cancelled!")
                 time.sleep(2)
                 erase_lines(1)
@@ -74,7 +78,10 @@ def change_user_info_db(users, user, attribute, new_value):
         Fore.YELLOW
         + f"Are you sure you want to change this user's {attribute}?"
     )
-    print("\t" + user[attribute] + " -> " + new_value)
+    if user[attribute] is None:
+        print("\tNew value will be:", new_value)
+    else:
+        print("\t" + user[attribute] + " -> " + new_value)
     confirmation = input(
         Fore.YELLOW + "Type CONFIRM to confirm: " + Fore.RESET
     )

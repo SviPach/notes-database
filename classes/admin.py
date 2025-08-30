@@ -1,8 +1,8 @@
 from classes import (
     Fore, msvcrt, get_choice, erase_lines,
-    show_user_info, change_user_info,
-    log_out_message, admin_find_user,
-    admin_delete_user, admin_add_new_user
+    change_user_info, log_out_message,
+    admin_find_user, admin_delete_user,
+    admin_add_new_user, show_user_info
 )
 
 
@@ -49,7 +49,9 @@ def admin_terminal(users, notes):
                 print(Fore.BLUE + "Your choice:", "Find a user")
                 user_found = admin_find_user(users)
                 show_user_info(user_found)
-                erase_lines(1)
+                print("Tap to continue...")
+                msvcrt.getch()
+                erase_lines(8)
             case 0:
                 log_out_message()
                 return

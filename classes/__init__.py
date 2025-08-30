@@ -10,7 +10,6 @@ import pymongo
 from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
 from classes.functions import (show_user_info,
-                               show_user_info_static,
                                change_user_info,
                                change_user_info_db,
                                notes_mode,
@@ -24,8 +23,8 @@ from classes.user import user_terminal
 __all__ = [
     "init", "Fore", "Back", "Style",
     "erase_lines", "get_choice", "admin_terminal",
-    "user_terminal", "show_user_info_static",
-    "show_user_info", "change_user_info",
+    "user_terminal", "show_user_info",
+    "change_user_info",
     "change_user_info_db", "notes_mode",
     "prompt", "ObjectId", "datetime",
     "time", "msvcrt", "DuplicateKeyError",

@@ -83,8 +83,8 @@ while logging_in:
                 erase_lines(1)
                 first_attempt = True
                 if login_username == "admin":
-                    admin_menu(users, notes)
+                    admin_terminal(users, notes)
                 else:
-                    user_menu(login_username, users, notes)
+                    user_terminal(login_username, users, notes)
 
                 break
